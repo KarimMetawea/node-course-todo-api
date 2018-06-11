@@ -6,6 +6,7 @@ var {Todo} = require('./models/Todo');
 var {users} = require('./models/users');
 
 var app = express();
+const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.post('/todos',(req,res) => {
   var newToDo=new Todo({
@@ -17,10 +18,18 @@ app.post('/todos',(req,res) => {
     res.status(400).send(e)
   })
 })
+app.get('/todos',(req,res) => {
+  Todo.find().then((todos) => {
+    res.send({todos});
+  },(e) => {
+    res.status(400).send(e);
+  });
+});
 
-app.listen(3000,() => {
-  console.log('server is connected');
-})
+app.listen(port,() => {
+  console.log('server is connected on  port',port);
+});
+module.exports={app};
 
 
 
